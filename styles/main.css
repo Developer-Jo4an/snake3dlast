@@ -1,0 +1,333 @@
+@charset "UTF-8";
+/**
+ * breakpoints
+ */
+/**
+ * font-family
+ */
+/**
+ * color
+ */
+/**
+ * z-layer
+ */
+/**
+ * font-weight
+ */
+/**
+ * other
+ */
+/**
+ * flash to keyframes functions
+ */
+/**
+ * Atlas
+**/
+/**
+ * Keyframes
+**/
+@import "~normalize.css/normalize.css";
+@import "~rc-collapse/assets/index.css";
+/**
+ * В Edge если в @keyframes нет описания начального состояния (0%/from), то ломается steps()
+ */
+/**
+ * Баг в Edge+css минификатор. Минификатор сокращает 0% до 0, в edge при этом ломается steps()
+ */
+/**
+ * Генерация keyframes для анимации 
+ * $FRAMES_ORDER: (0,1,2,3,4,5,6,7,8,9,10,11,0,1,2,3,4,5,6,7,8,9,10,11,0);
+ * @include animation(ANIMATION_NAME frames2time(length($frames_static) + 25) steps(1) infinite) {
+ *   @include sequence-keyframes((w: $FRAME_WIDTH, h: $FRAME_HEIGHT), (w: $ATLAS_WIDTH, h: $ATLAS_HEIGHT), $FRAMES_ORDER, 25);
+ * }
+ */
+@keyframes cube-loader {
+  0%, 10% {
+    transform: perspective(136px) rotateX(-180deg);
+    opacity: 0;
+  }
+  25%, 75% {
+    transform: perspective(136px) rotateX(0deg);
+    opacity: 1;
+  }
+  90%, 100% {
+    transform: perspective(136px) rotateY(180deg);
+    opacity: 0;
+  }
+}
+@keyframes fade-in {
+  0% {
+    visibility: visible;
+    opacity: 0;
+  }
+  100% {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+@keyframes fade-in-top {
+  0% {
+    visibility: visible;
+    opacity: 0;
+    transform: translate(0, -10vh);
+  }
+  100% {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader-inner {
+  0% {
+    height: 0%;
+  }
+  25% {
+    height: 0%;
+  }
+  50% {
+    height: 100%;
+  }
+  75% {
+    height: 100%;
+  }
+  100% {
+    height: 0%;
+  }
+}
+@keyframes lock-on {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    opacity: 1;
+    background-position: 100% 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes frame-top {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+@keyframes frame-left {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  background: #ffffff;
+}
+
+body {
+  opacity: 1;
+  transition: opacity 0.2s;
+  min-height: 100vh;
+}
+body.preload {
+  opacity: 0;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
+a,
+button,
+input,
+textarea,
+[tabindex] {
+  color: inherit;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+form {
+  margin-block-end: 0;
+}
+
+* {
+  transform-origin: 50% 50%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/**
+ * Обычный текст
+ */
+html {
+  font-family: "Thintel", Helvetica, sans-serif;
+  color: #000000;
+}
+@media screen and (min-width: 1280px) {
+  html {
+    font-size: 1.481vh;
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  html {
+    font-size: 0.833vw;
+  }
+}
+@media screen and (max-width: 1023px) {
+  html {
+    font-size: 3.4785vw;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  html {
+    font-size: 2.89875vw;
+  }
+}
+
+.game-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.game-preloader__spinner {
+  width: 48px;
+  height: 48px;
+  background: pink;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.game-preloader__spinner:after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  color: red;
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 25px 2px, 10px 22px;
+}
+
+.game-preloader__title {
+  font-size: 32px;
+  color: white;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.game-container__buttons {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid black;
+  background-color: red;
+}
+
+.game-container__button {
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid black;
+  color: red;
+  font-weight: 600;
+  background-color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.game-container__button:hover {
+  background-color: coral;
+  color: white;
+}
+
+/* Layout */
+.main-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+#menu-burger:checked ~ * .main-container {
+  height: 100vh;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+#menu-burger:checked + .main-container {
+  height: 100vh;
+}
+
+/*# sourceMappingURL=main.css.map */

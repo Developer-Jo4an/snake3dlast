@@ -1,0 +1,12 @@
+{
+  "assets": [
+    {
+      "name": "skin",
+      "src": "/images/game/skin.jpg"
+    },
+    {
+      "name": "floor",
+      "src": "/images/game/floor.jpg"
+    }
+  ]
+}
