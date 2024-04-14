@@ -26,6 +26,7 @@
     "css-loader": "^6.7.3",
     "dedent": "latest",
     "eslint-plugin-react": "^7.20.6",
+    "gsap": "^3.12.5",
     "html-react-parser": "^1.4.0",
     "next": "^12.2.3",
     "normalize.css": "latest",

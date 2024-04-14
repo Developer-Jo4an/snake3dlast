@@ -1,6 +1,6 @@
-@import "../components/gamePreloader/GamePreloader";
-@import "../components/gameContainer/GameContainer";
 @import "../components/layouts/MainLayout";
+@import "../components/GameContainer/GameContainer";
+@import "../components/GameLoader/GameLoader";
 
 //Стилизация для collapse
 @import "~rc-collapse/assets/index.css";

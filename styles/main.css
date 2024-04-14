@@ -222,91 +222,6 @@ html {
   }
 }
 
-.game-preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.game-preloader__spinner {
-  width: 48px;
-  height: 48px;
-  background: pink;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-.game-preloader__spinner:after {
-  content: "";
-  box-sizing: border-box;
-  position: absolute;
-  left: 6px;
-  top: 10px;
-  width: 12px;
-  height: 12px;
-  color: red;
-  background: currentColor;
-  border-radius: 50%;
-  box-shadow: 25px 2px, 10px 22px;
-}
-
-.game-preloader__title {
-  font-size: 32px;
-  color: white;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.game-container {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-}
-
-.game-container__buttons {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid black;
-  background-color: red;
-}
-
-.game-container__button {
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid black;
-  color: red;
-  font-weight: 600;
-  background-color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.game-container__button:hover {
-  background-color: coral;
-  color: white;
-}
-
 /* Layout */
 .main-container {
   position: relative;
@@ -328,6 +243,61 @@ html {
 
 #menu-burger:checked + .main-container {
   height: 100vh;
+}
+
+.game-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.game-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.game-loader__spinner {
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+  position: relative;
+  border: 4px solid lightcoral;
+  box-sizing: border-box;
+  animation: fill 2s linear infinite alternate;
+  color: rgba(255, 127, 80, 0.8);
+  border-radius: 0 0 4px 4px;
+}
+.game-loader__spinner:after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 4px solid lightcoral;
+  width: 20px;
+  height: 25px;
+  border-radius: 0 4px 4px 0;
+}
+
+@keyframes fill {
+  0% {
+    box-shadow: 0 0 inset;
+  }
+  100% {
+    box-shadow: 0 -48px inset;
+  }
+}
+.game-loader__status {
+  font-size: 32px;
+  margin: 0;
 }
 
 /*# sourceMappingURL=main.css.map */

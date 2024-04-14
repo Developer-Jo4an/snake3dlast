@@ -11,8 +11,6 @@ export class Controls {
 
   activeActions = []
 
-  snakeAnimationId
-
   constructor(head, bodyChunks) {
     this.activateAction = this.activateAction.bind(this)
     this.deactivateAction = this.deactivateAction.bind(this)
@@ -51,7 +49,7 @@ export class Controls {
 
   snakeAnimation() {
     this.activeActions.forEach(action => this[`${ action }Action`]?.())
-    this.snakeAnimationId = requestAnimationFrame(this.snakeAnimation)
+    requestAnimationFrame(this.snakeAnimation)
   }
 
   getCurrentAction(keyCode) {
@@ -94,25 +92,14 @@ export class Controls {
     this.activeActions = this.activeActions.filter(action => action !== currentAction.name)
   }
 
-  stopActions() {
-    this.activeKeys = []
-    this.activeActions = []
-    for (const name in this.actions) {
-      const obj = this.actions[name]
-      obj.isActive = false
-    }
-  }
-
   listenEvents() {
-    this.snakeAnimationId = requestAnimationFrame(this.snakeAnimation)
+    requestAnimationFrame(this.snakeAnimation)
     window.addEventListener('keydown', this.activateAction)
     window.addEventListener('keyup', this.deactivateAction)
   }
 
   unlistenEvents() {
-    this.stopActions()
-    if (this.snakeAnimationId)
-      cancelAnimationFrame(this.snakeAnimationId)
+    cancelAnimationFrame(this.snakeAnimation)
     window.removeEventListener('keydown', this.activateAction)
     window.removeEventListener('keyup', this.deactivateAction)
   }

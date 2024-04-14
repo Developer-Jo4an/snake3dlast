@@ -1,12 +1,8 @@
 {
-  "assets": [
-    {
-      "name": "skin",
-      "src": "/images/game/skin.jpg"
-    },
-    {
-      "name": "floor",
-      "src": "/images/game/floor.jpg"
+  "config": {
+    "assets": {
+      "skin": "/images/game/skin.jpg",
+      "floor": "/images/game/floor.jpg"
     }
-  ]
+  }
 }

@@ -1,22 +1,22 @@
 import { BODY_CHUNK_AMOUNT } from '../constants/bodyContstants'
-import { Head } from './Head'
 import { Body } from './Body'
 import { Controls } from './Controls'
+import { Head } from './Head'
 
 export class Snake {
 
-    head = new Head()
+  head = new Head()
 
-    bodyChunks = new Array(BODY_CHUNK_AMOUNT).fill().map((_, x) => new Body(x + 1))
+  bodyChunks = new Array(BODY_CHUNK_AMOUNT).fill().map((_, x) => new Body(x + 1))
 
-    controls
+  controls
 
-    activate() {
-        this.controls = new Controls(this.head, this.bodyChunks)
-        this.controls.listenEvents()
-    }
+  activate() {
+    this.controls = new Controls(this.head, this.bodyChunks)
+    this.controls.listenEvents()
+  }
 
-    deactivate() {
-        this.controls.unlistenEvents()
-    }
+  deactivate() {
+    this.controls.unlistenEvents()
+  }
 }

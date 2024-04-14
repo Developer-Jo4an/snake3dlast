@@ -3,14 +3,14 @@ import { BODY_CHUNK_HEIGHT, BODY_CHUNK_RADIUS } from '../constants/bodyContstant
 let instance = null
 
 export class BodyGeometry extends THREE.CylinderGeometry {
-	constructor() {
-		if (instance) return instance
+  constructor() {
+    if (instance) return instance
 
-		super(BODY_CHUNK_RADIUS, BODY_CHUNK_RADIUS, BODY_CHUNK_HEIGHT)
+    super(BODY_CHUNK_RADIUS, BODY_CHUNK_RADIUS, BODY_CHUNK_HEIGHT)
 
-		instance = null
+    instance = null
 
-		this.translate(0, BODY_CHUNK_HEIGHT * 0.5, 0)
-		this.rotateX(Math.PI * 0.5)
-	}
+    this.translate(0, BODY_CHUNK_HEIGHT * 0.5, 0)
+    this.rotateX(Math.PI * 0.5)
+  }
 }

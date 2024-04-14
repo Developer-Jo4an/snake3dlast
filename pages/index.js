@@ -1,40 +1,56 @@
-import { useEffect, useRef, } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { appStateLogic, LOADING, PAUSED, PLAYING } from '../utils/redux/constants/app'
-import { toNextState } from '../redux/reducer/app'
-import GamePreloader from '../components/gamePreloader/GamePreloader'
-import GameContainer from '../components/gameContainer/GameContainer'
+import { INITIALIZATION, LOADING, LOADING_COMPLETE, LOADING_MANIFEST, SHOWING } from '../utils/redux/constants/app'
+import { toNext } from '../redux/reducer/app'
+import GameContainer from '../components/GameContainer/GameContainer'
+import GameLoader from '../components/GameLoader/GameLoader'
 
 export default function Home() {
   const dispatch = useDispatch()
+  const gameContainerRef = useRef()
   const activeState = useSelector(state => state.app.activeState)
-  const curStateLogic = appStateLogic.find(({ key }) => key === activeState)
 
-  const containerRef = useRef()
+  const gameStateLogic = useMemo(() => ({
+    async [LOADING_MANIFEST]() {
+      window.gameConfig = await import('/manifest.json')
+    },
+    async [LOADING]() {
+      window.THREE = await import('three')
+      window.textures = {}
+
+      const { assets } = gameConfig.config
+      const textureLoader = new THREE.TextureLoader()
+      for (const key in assets) {
+        window.textures[key] = await new Promise(resolve =>
+          textureLoader.load(assets[key], resolve)
+        )
+      }
+      const { SceneInit } = await import('/controllers/scene/SceneInit')
+      window.scene = new SceneInit(gameContainerRef.current)
+    },
+    [LOADING_COMPLETE]() {
+      console.log('Loading Complete')
+    },
+    [INITIALIZATION]() {
+      window.scene.activate()
+    },
+    [SHOWING]() {
+      window.scene.showing()
+    }
+  }), [])
 
   useEffect(() => {
-    (async () => {
-      const { callback } = curStateLogic
-
-      if (activeState === LOADING) {
-        await callback(containerRef.current)
-      } else if (activeState === PAUSED) {
-        window.controller.pause()
-      } else if (activeState === PLAYING) {
-        window.controller.play()
-      } else {
-        if (callback)
-          await callback()
-      }
-
-      dispatch(toNextState())
+    (async() => {
+      const callback = gameStateLogic[activeState]
+      if (callback) await callback()
+      dispatch(toNext())
     })()
   }, [activeState])
 
   return (
     <div className="container">
-      <GameContainer reference={ containerRef } />
-      <GamePreloader activeState={ activeState } />
+      <GameContainer reference={ gameContainerRef } />
+      <GameLoader activeState={ activeState } />
     </div>
   )
 }
