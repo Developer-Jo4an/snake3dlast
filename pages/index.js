@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="container">
-      <GameContainer reference={ gameContainerRef }/>
+      <GameContainer reference={ gameContainerRef } />
       <GameLoader />
       <GameButtons />
     </div>

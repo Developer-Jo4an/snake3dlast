@@ -86,7 +86,7 @@ export class SceneInit {
     this.showingTimeline.to(this.camera.position, {
       duration: 2,
       x: this.snake.head.position.x + CAMERA_X_DISTANCE,
-      y: this.snake.head.position.x + CAMERA_Y_DISTANCE,
+      y: this.snake.head.position.y + CAMERA_Y_DISTANCE,
       z: this.snake.head.position.z,
       ease: 'sine.inOut',
       onComplete: () => {
