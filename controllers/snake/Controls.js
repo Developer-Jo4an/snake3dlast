@@ -1,8 +1,6 @@
 import { ACTIONS, AVAILABLE_KEYS, MOVE_SPEED, ROTATE_SPEED } from '../constants/moveConstants'
 import { BODY_CHUNK_HEIGHT } from '../constants/bodyContstants'
 
-let instance = null
-
 export class Controls {
 
   actions = ACTIONS
@@ -16,9 +14,6 @@ export class Controls {
   snakeAnimationFrame
 
   constructor(head, bodyChunks) {
-    if (instance) return instance
-    instance = this
-
     this.activateAction = this.activateAction.bind(this)
     this.deactivateAction = this.deactivateAction.bind(this)
     this.snakeAnimation = this.snakeAnimation.bind(this)
@@ -99,6 +94,11 @@ export class Controls {
     this.activeActions = this.activeActions.filter(action => action !== currentAction.name)
   }
 
+  clearActionsState() {
+    this.activeKeys = []
+    this.activeActions = []
+  }
+
   listenEvents() {
     this.snakeAnimationFrame = requestAnimationFrame(this.snakeAnimation)
     window.addEventListener('keydown', this.activateAction)
@@ -106,6 +106,7 @@ export class Controls {
   }
 
   unlistenEvents() {
+    this.clearActionsState()
     cancelAnimationFrame(this.snakeAnimationFrame)
     window.removeEventListener('keydown', this.activateAction)
     window.removeEventListener('keyup', this.deactivateAction)

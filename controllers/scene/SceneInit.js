@@ -28,13 +28,13 @@ export class SceneInit {
 
   renderer = new THREE.WebGLRenderer()
 
-  snake = new Snake()
+  snake
 
   generalAnimationFrame
 
   showingAnimationFrame
 
-  showingTimeline = gsap.timeline()
+  showingTimeline
 
   constructor(container) {
     this.resize = this.resize.bind(this)
@@ -45,12 +45,9 @@ export class SceneInit {
   }
 
   addSnake() {
+    this.snake = new Snake()
     this.scene.add(this.snake.head)
     this.snake.bodyChunks.forEach(chunk => this.scene.add(chunk))
-  }
-
-  activateSnake() {
-    this.snake.activate()
   }
 
   createFog() {
@@ -62,17 +59,17 @@ export class SceneInit {
     this.scene.add(new Floor())
   }
 
-  switchAnimationFrame() {
-    cancelAnimationFrame(this.showingAnimationFrame)
-    this.generalAnimationFrame = requestAnimationFrame(this.generalAnimation)
-  }
-
   paused() {
     this.snake.deactivate()
     cancelAnimationFrame(this.generalAnimationFrame)
   }
 
-  updater() {
+  playing() {
+    this.snake.activate()
+    this.generalAnimationFrame = requestAnimationFrame(this.generalAnimation)
+  }
+
+  lookToTarget() {
     this.camera.updateWorldMatrix()
     this.camera.lookAt(this.snake.head.position)
     this.renderer.render(this.scene, this.camera)
@@ -93,25 +90,24 @@ export class SceneInit {
       z: this.snake.head.position.z,
       ease: 'sine.inOut',
       onComplete: () => {
-        this.activateSnake()
         this.toPlayingMode()
-        this.switchAnimationFrame()
-
+        cancelAnimationFrame(this.showingAnimationFrame)
         this.showingTimeline.kill()
-
         endOfAnimation = true
       }
     })
 
     if (endOfAnimation) return
 
-    this.updater()
+    this.lookToTarget()
+    this.renderer.render(this.scene, this.camera)
     this.showingAnimationFrame = requestAnimationFrame(this.showingAnimation)
   }
 
   showing() {
     this.updateCamera(CAMERA_X_START_DISTANCE, CAMERA_Y_START_DISTANCE)
-    this.updater()
+    this.renderer.render(this.scene, this.camera)
+    this.showingTimeline = gsap.timeline()
     this.showingAnimationFrame = requestAnimationFrame(this.showingAnimation)
   }
 
@@ -121,8 +117,7 @@ export class SceneInit {
       this.snake.head.position.y + y,
       this.snake.head.position.z
     )
-    this.camera.updateWorldMatrix()
-    this.camera.lookAt(this.snake.head.position)
+    this.lookToTarget()
   }
 
   generalAnimation() {
@@ -130,26 +125,6 @@ export class SceneInit {
 
     this.renderer.render(this.scene, this.camera)
     this.generalAnimationFrame = requestAnimationFrame(this.generalAnimation)
-  }
-
-  mounting() {
-    this.$container.append(this.renderer.domElement)
-
-    this.createFog()
-    this.createFloor()
-    this.addSnake()
-
-    this.resize()
-  }
-
-  demounting() {
-    while (this.scene.children[0])
-      this.scene.remove(this.scene.children[0])
-    this.renderer.dispose()
-    this.snake.deactivate()
-    delete window.THREE
-    delete window.textures
-    cancelAnimationFrame(this.generalAnimationFrame)
   }
 
   resize() {
@@ -163,12 +138,30 @@ export class SceneInit {
   }
 
   initialization() {
-    this.mounting()
+    this.$container.append(this.renderer.domElement)
+
+    this.createFog()
+    this.createFloor()
+    this.addSnake()
+    this.resize()
+
     window.addEventListener('resize', this.resize)
   }
 
-  deactivate() {
-    this.demounting()
+  reset() {
+    cancelAnimationFrame(this.generalAnimationFrame)
+
+    this.renderer.domElement.remove()
+
+    while (this.scene.children[0])
+      this.scene.remove(this.scene.children[0])
+
+    this.scene.fog = null
+    this.scene.background = null
+
+    this.snake.deactivate()
+    this.snake = null
+
     window.removeEventListener('resize', this.resize)
   }
 }

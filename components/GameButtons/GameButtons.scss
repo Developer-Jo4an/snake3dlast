@@ -1,0 +1,32 @@
+.game-container__buttons {
+  position: absolute;
+
+  top: 10px;
+  left: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.game-container__button {
+  padding: 10px 20px;
+
+  border-radius: 10px;
+  border: 2px solid coral;
+
+  background-color: #ffffff;
+  color: coral;
+
+  font-weight: 600;
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: .3s;
+
+  &:hover {
+    background-color: coral;
+    color: #ffffff;
+  }
+}

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { LOADING_MANIFEST, PAUSED, RESET, stateChange } from '../../utils/redux/constants/app'
+import { INITIALIZATION, LOADING_MANIFEST, PAUSED, PLAYING, RESET, stateChange } from '../../utils/redux/constants/app'
 
 const initialState = {
     activeState: LOADING_MANIFEST
@@ -9,12 +9,21 @@ const app = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    toNext: state => { state.activeState = stateChange[state.activeState] },
-    toPaused: state => { state.activeState = PAUSED },
-    toReset: state => { state.activeState = RESET },
+    toNext: state => {
+      const nextState = stateChange[state.activeState]
+      if (nextState) state.activeState = nextState
+    },
+    togglePaused: state => {
+      if (state.activeState === PAUSED || state.activeState === PLAYING)
+        state.activeState = state.activeState === PAUSED ? PLAYING : PAUSED
+    },
+    toggleReset: state => {
+      if (state.activeState === PLAYING || state.activeState === RESET)
+        state.activeState = state.activeState === RESET ? INITIALIZATION : RESET
+    },
   }
 })
 
-export const { toNext, toPaused, toReset, setConfig, setScene } = app.actions
+export const { toNext, togglePaused, toggleReset } = app.actions
 
 export default app

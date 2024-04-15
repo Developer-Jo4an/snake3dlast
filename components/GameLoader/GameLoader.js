@@ -1,8 +1,8 @@
 import { PAUSED, PLAYING, RESET, SHOWING } from '../../utils/redux/constants/app'
+import { useSelector } from 'react-redux'
 
-const GameLoader = ({ activeState }) => {
-
-  return
+const GameLoader = () => {
+  const activeState = useSelector(state => state.app.activeState)
 
   if (
     activeState === SHOWING ||
@@ -10,7 +10,6 @@ const GameLoader = ({ activeState }) => {
     activeState === PAUSED ||
     activeState === RESET
   ) return
-
 
   return (
     <div className={ 'game-loader' }>

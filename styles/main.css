@@ -250,25 +250,6 @@ html {
   height: 100vh;
 }
 
-.game-container__button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 2px solid coral;
-  background-color: #ffffff;
-  color: coral;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.game-container__button:hover {
-  background-color: coral;
-  color: #ffffff;
-}
-
 .game-loader {
   position: fixed;
   top: 0;
@@ -317,6 +298,31 @@ html {
 .game-loader__status {
   font-size: 32px;
   margin: 0;
+}
+
+.game-container__buttons {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.game-container__button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid coral;
+  background-color: #ffffff;
+  color: coral;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.game-container__button:hover {
+  background-color: coral;
+  color: #ffffff;
 }
 
 /*# sourceMappingURL=main.css.map */

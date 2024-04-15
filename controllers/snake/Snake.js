@@ -17,6 +17,6 @@ export class Snake {
   }
 
   deactivate() {
-    this.controls.unlistenEvents()
+      this.controls?.unlistenEvents()
   }
 }
