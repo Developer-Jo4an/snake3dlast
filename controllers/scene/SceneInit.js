@@ -2,8 +2,7 @@ import {
   CAMERA_DEFAULT_ASPECT,
   CAMERA_FAR,
   CAMERA_FOV,
-  CAMERA_NEAR,
-  CAMERA_X_DISTANCE, CAMERA_X_START_DISTANCE, CAMERA_Y_DISTANCE, CAMERA_Y_START_DISTANCE
+  CAMERA_NEAR, CAMERA_X_DISTANCE, CAMERA_X_START_DISTANCE, CAMERA_Y_DISTANCE, CAMERA_Y_START_DISTANCE
 } from '../constants/cameraConstants'
 import {
   BACK_FOR_FOG,
@@ -11,10 +10,12 @@ import {
   FOG_FAR,
   FOG_NEAR
 } from '../constants/fogConstants'
-import { Snake } from '../snake/Snake'
 import { Floor } from '../floor/Floor'
+import { Snake } from '../snake/Snake'
+import { gsap } from 'gsap'
 
 export class SceneInit {
+  PLAYING_MODE = 'playing'
 
   scene = new THREE.Scene()
 
@@ -30,12 +31,15 @@ export class SceneInit {
   snake = new Snake()
 
   generalAnimationFrame
+
   showingAnimationFrame
+
+  showingTimeline = gsap.timeline()
 
   constructor(container) {
     this.resize = this.resize.bind(this)
     this.generalAnimation = this.generalAnimation.bind(this)
-    this.showing = this.showing.bind(this)
+    this.showingAnimation = this.showingAnimation.bind(this)
 
     this.$container = container
   }
@@ -43,6 +47,9 @@ export class SceneInit {
   addSnake() {
     this.scene.add(this.snake.head)
     this.snake.bodyChunks.forEach(chunk => this.scene.add(chunk))
+  }
+
+  activateSnake() {
     this.snake.activate()
   }
 
@@ -55,29 +62,65 @@ export class SceneInit {
     this.scene.add(new Floor())
   }
 
-  showingAnimation() {
-
+  switchAnimationFrame() {
+    cancelAnimationFrame(this.showingAnimationFrame)
+    this.generalAnimationFrame = requestAnimationFrame(this.generalAnimation)
   }
 
-  showing() {
-    // if (
-    //   this.camera.position.x <= this.snake.head.position.x + CAMERA_X_DISTANCE
-    //   &&
-    //   this.camera.position.y <= this.snake.head.position.y + CAMERA_Y_DISTANCE
-    // ) {
-    //   cancelAnimationFrame(this.showingAnimationFrame)
-    //   return
-    // }
+  paused() {
+    this.snake.deactivate()
+    cancelAnimationFrame(this.generalAnimationFrame)
+  }
 
-    this.updateCamera(-0.01, -0.01)
-    this.showingAnimationFrame = requestAnimationFrame(this.showing)
+  updater() {
+    this.camera.updateWorldMatrix()
+    this.camera.lookAt(this.snake.head.position)
     this.renderer.render(this.scene, this.camera)
   }
 
-  updateCamera(x, y) {
-    this.camera.position.x = this.snake.head.position.x + x
-    this.camera.position.y = this.snake.head.position.y + y
+  toPlayingMode() {
+    const playingEvent = new CustomEvent(this.PLAYING_MODE)
+    window.dispatchEvent(playingEvent)
+  }
 
+  showingAnimation() {
+    let endOfAnimation = false
+
+    this.showingTimeline.to(this.camera.position, {
+      duration: 2,
+      x: this.snake.head.position.x + CAMERA_X_DISTANCE,
+      y: this.snake.head.position.x + CAMERA_Y_DISTANCE,
+      z: this.snake.head.position.z,
+      ease: 'sine.inOut',
+      onComplete: () => {
+        this.activateSnake()
+        this.toPlayingMode()
+        this.switchAnimationFrame()
+
+        this.showingTimeline.kill()
+
+        endOfAnimation = true
+      }
+    })
+
+    if (endOfAnimation) return
+
+    this.updater()
+    this.showingAnimationFrame = requestAnimationFrame(this.showingAnimation)
+  }
+
+  showing() {
+    this.updateCamera(CAMERA_X_START_DISTANCE, CAMERA_Y_START_DISTANCE)
+    this.updater()
+    this.showingAnimationFrame = requestAnimationFrame(this.showingAnimation)
+  }
+
+  updateCamera(x, y) {
+    this.camera.position.set(
+      this.snake.head.position.x + x,
+      this.snake.head.position.y + y,
+      this.snake.head.position.z
+    )
     this.camera.updateWorldMatrix()
     this.camera.lookAt(this.snake.head.position)
   }
@@ -97,10 +140,6 @@ export class SceneInit {
     this.addSnake()
 
     this.resize()
-
-    this.updateCamera(CAMERA_X_START_DISTANCE, CAMERA_Y_START_DISTANCE)
-    this.renderer.render(this.scene, this.camera)
-    this.showingAnimationFrame = requestAnimationFrame(this.showing)
   }
 
   demounting() {
@@ -123,7 +162,7 @@ export class SceneInit {
     this.renderer.setSize(width, height)
   }
 
-  activate() {
+  initialization() {
     this.mounting()
     window.addEventListener('resize', this.resize)
   }
