@@ -18,7 +18,7 @@ const app = createSlice({
         state.activeState = state.activeState === PAUSED ? PLAYING : PAUSED
     },
     toggleReset: state => {
-      if (state.activeState === RESET || state.activeState === PLAYING)
+      if (state.activeState === RESET || state.activeState === PLAYING || state.activeState === PAUSED)
         state.activeState = state.activeState === RESET ? INITIALIZATION : RESET
     },
   }
