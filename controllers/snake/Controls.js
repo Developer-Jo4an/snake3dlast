@@ -2,7 +2,6 @@ import { ACTIONS, AVAILABLE_KEYS, MOVE_SPEED, ROTATE_SPEED } from '../constants/
 import { BODY_CHUNK_HEIGHT } from '../constants/bodyContstants'
 
 export class Controls {
-
   actions = ACTIONS
 
   availableKeys = AVAILABLE_KEYS
